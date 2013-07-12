@@ -17,15 +17,19 @@ public class Query {
 	private Map<String,String> searchTypes;
 	private Map<String,String> arguments;
 	
-	public Query(String query)
+	public Query()
 	{
-		this.query = query;
 		initialize();
+	}
+	
+	public void setQuery(String q)
+	{
+		query = q;
 	}
 	
 	public String getQuery()
 	{
-		return query;
+		return (query == null) ? "~" : query;
 	}
 	
 	public String compute()

@@ -23,7 +23,9 @@ public class Dewey {
 	private Document webpage;
 	
 	public Dewey()
-	{}
+	{
+		itemResults = new ArrayList<Item>();
+	}
 	
 	public String getResult()
 	{
@@ -34,6 +36,7 @@ public class Dewey {
 	{
 		if( itemResults == null || itemResults.size() == 0 )
 		{
+			Log.d("DWY/GIR", "itemResults is null or has none");
 			return new ArrayList<Item>();
 		}
 		return itemResults;
@@ -56,10 +59,10 @@ public class Dewey {
 	{
 		Item temp = new Item();
 		
-		temp.setTitle("A Title");
-		temp.setAuthor("Adi Natraj");
+		temp.setTitle(new String("A Title"));
+		temp.setAuthor(new String("Adi Natraj"));
 		temp.setRating((float)4.2);
-		temp.setType("EBOOK");
+		temp.setType(new String("EBOOK"));
 		
 		return temp;
 	}
@@ -73,33 +76,45 @@ public class Dewey {
 			String classLabel = classBearer.attr("class");
 			if(classLabel.equals("briefcitMedia"))
 			{
-				if(classBearer.childNodeSize() > 0)
+				Elements kids = classBearer.children();
+				if(kids.isEmpty())
 				{
-					tempItem.setType(classBearer.getElementsByTag("a").get(0).attr("alt"));
+					Log.d("DWY/PR:MT", classBearer.text());
+					tempItem.setType(classBearer.text().toLowerCase());
 				}
 				else
 				{
-					tempItem.setType(classBearer.text());
+					Log.d("DWY/PR:MT", kids.get(0).attr("alt"));
+					tempItem.setType(kids.get(0).attr("alt").toLowerCase());
 				}		
 			}
 			else if(classLabel.equals("briefcitTitle"))
 			{
-				Element link = classBearer.getElementsByAttribute("a").get(0);
-				tempItem.setItemURL(link.attr("href"));				
-				String titleJumble = link.text();
-				tempItem.setTitle(titleJumble.split("[ ]*\\[|[ ]*[:][ ]*|[ ]*[/][ ]*")[0]);
-	
+				Elements link = classBearer.getElementsByTag("a");
+				if( link.size() == 0 )
+					Log.d("DWY/PR", "no link for title");
+				else{
+					String[] titSections;
+					tempItem.setItemURL(link.get(0).attr("href"));				
+					String titleJumble = classBearer.text();
+					titSections = titleJumble.split("[ ]*\\[|[ ]*[:][ ]*|[ ]*[/][ ]*");
+					tempItem.setTitle(titSections[0]);
+//					Log.d("DWY/PR", link.get(0).attr("href"));
+					Log.d("DWY/PR", tempItem.getTitle());
+//					Log.d("DWY/PR*:",titSections[titSections.length-1]);
+				}
 			}
 			else if(classLabel.equals("briefcitRequest"))
 			{
-				Element link = classBearer.getElementsByAttribute("a").get(0);
+				Element link = classBearer.getElementsByTag("a").get(0);
 				tempItem.setHoldURL(link.attr("href"));
+				//Log.d("DWY/PR:RQ", link.attr("href"));
 			}
 			if(classLabel.equals("bibItemsEntry"))
 			{
 				Availability tempAvail = new Availability();
 				int counter = 1;
-				for(Element line : classBearer.getElementsByAttribute("td"))
+				for(Element line : classBearer.getElementsByTag("td"))
 				{
 					switch(counter){
 					case 1:
@@ -120,6 +135,17 @@ public class Dewey {
 				tempItem.addAvailability(tempAvail);
 			}
 		}
+		Elements tBookCover = row.getElementsByAttributeValue("alt", "Book Cover");
+		if( tBookCover.isEmpty() )
+		{
+			Log.d("DWY/PR:S", "no cover?");
+			tempItem.setCoverURL("???");
+		}
+		else
+		{
+			Log.d("DWY/PR:S", tBookCover.get(0).attr("src"));
+			tempItem.setCoverURL(tBookCover.get(0).attr("src"));
+		}
 		tempItem.setAuthor("???");
 		return tempItem;
 	}
@@ -128,10 +154,14 @@ public class Dewey {
 	{
 		Elements rows = webpage.getElementsByClass("briefCitRow");
 		Log.d("DWY/tH", String.valueOf(rows.size()));
-		
+		Item tItem;
 		for( Element row : rows)
 		{
-			itemResults.add(parseRow(row));
+			tItem = parseRow(row);
+			if( tItem == null )
+				Log.d("DWY/TH:", "item is null");
+			else
+				itemResults.add(parseRow(row));
 		}
 	}
 	
@@ -163,7 +193,7 @@ public class Dewey {
 		{
 			Log.d("Couldnt load data from page", e.toString());
 		}
-	
+		searchResult = "no result.";
 		return true;
 	}
 }

@@ -10,13 +10,19 @@ public class Item {
 	private String author;
 	private String callNo;
 	private float rating;
-	private Bitmap preview;
+	private String coverURL;
 	private String itemURL;
 	private String holdURL;
 	private ArrayList<Availability> availabilities;
 	
 	public Item()
-	{}
+	{
+		availabilities = new ArrayList<Availability>();
+		type = "?M";
+		title = "?T";
+		author = "?A";
+		rating = (float)4.2;
+	}
 	
 	public void setType(String t)
 	{
@@ -54,11 +60,6 @@ public class Item {
 		return rating;
 	}
 	
-	public Bitmap getPreview()
-	{
-		return preview;
-	}
-	
 	public String toString()
 	{
 		return getTitle() + "\t --- \t" + getAuthor() + "\n" + getType() + "\t" + getRating() + "\n";
@@ -92,6 +93,14 @@ public class Item {
 
 	public void addAvailability(Availability tempAvail) {
 		availabilities.add(tempAvail);
+	}
+
+	public String getCoverURL() {
+		return coverURL;
+	}
+
+	public void setCoverURL(String coverURL) {
+		this.coverURL = coverURL;
 	}
 
 }

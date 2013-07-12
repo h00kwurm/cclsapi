@@ -1,6 +1,11 @@
 package com.example.cclsapi;
 
 public class Availability {
+	@Override
+	public String toString() {
+		return "Availability [location=" + location + ", callNo=" + callNo
+				+ ", status=" + status + "]";
+	}
 	private String location;
 	private String callNo;
 	private String status;
