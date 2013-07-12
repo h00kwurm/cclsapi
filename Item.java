@@ -15,7 +15,6 @@ public class Item {
 	private String holdURL;
 	private ArrayList<Availability> availabilities;
 	
-	
 	public Item()
 	{}
 	
@@ -60,10 +59,10 @@ public class Item {
 		return preview;
 	}
 	
-//	public String toString()
-//	{
-//		return getTitle() + "\t --- \t" + getAuthor() + "\n" + getType() + "\t" + getRating() + "\n";
-//	}
+	public String toString()
+	{
+		return getTitle() + "\t --- \t" + getAuthor() + "\n" + getType() + "\t" + getRating() + "\n";
+	}
 
 
 	public String getCallNo() {

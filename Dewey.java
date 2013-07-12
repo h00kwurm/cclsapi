@@ -120,6 +120,7 @@ public class Dewey {
 				tempItem.addAvailability(tempAvail);
 			}
 		}
+		tempItem.setAuthor("???");
 		return tempItem;
 	}
 	
