@@ -79,12 +79,12 @@ public class Dewey {
 				Elements kids = classBearer.children();
 				if(kids.isEmpty())
 				{
-					Log.d("DWY/PR:MT", classBearer.text());
+//					Log.d("DWY/PR:MT", classBearer.text());
 					tempItem.setType(classBearer.text().toLowerCase());
 				}
 				else
 				{
-					Log.d("DWY/PR:MT", kids.get(0).attr("alt"));
+//					Log.d("DWY/PR:MT", kids.get(0).attr("alt"));
 					tempItem.setType(kids.get(0).attr("alt").toLowerCase());
 				}		
 			}
@@ -100,7 +100,7 @@ public class Dewey {
 					titSections = titleJumble.split("[ ]*\\[|[ ]*[:][ ]*|[ ]*[/][ ]*");
 					tempItem.setTitle(titSections[0]);
 //					Log.d("DWY/PR", link.get(0).attr("href"));
-					Log.d("DWY/PR", tempItem.getTitle());
+//					Log.d("DWY/PR", tempItem.getTitle());
 //					Log.d("DWY/PR*:",titSections[titSections.length-1]);
 				}
 			}
@@ -143,7 +143,7 @@ public class Dewey {
 		}
 		else
 		{
-			Log.d("DWY/PR:S", tBookCover.get(0).attr("src"));
+			//Log.d("DWY/PR:S", tBookCover.get(0).attr("src"));
 			tempItem.setCoverURL(tBookCover.get(0).attr("src"));
 		}
 		tempItem.setAuthor("???");
@@ -187,13 +187,12 @@ public class Dewey {
 		{
 			Log.d("DWY/URL", baseURL + q.compute() + tailURL);
 			webpage = Jsoup.connect(baseURL + urlExtension).get();
-			searchResult = webpage.text();
+			Log.d("DWY/URL", "fetch complete");
 			
 		}catch (Exception e)
 		{
 			Log.d("Couldnt load data from page", e.toString());
 		}
-		searchResult = "no result.";
 		return true;
 	}
 }
